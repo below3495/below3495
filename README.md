@@ -1,12 +1,12 @@
 ## Тренировочные тесты на продовой Еде
-addCleanCartRest.spec.js - Добавление и удаление товара из корзины ресторана
-addCleanCartShop.spec.js - Добавление и удаление товара из корзины магазина
-changeAddress.spec.js - Изменение адреса на каталоге
-openDeliveryConditions.spec.js - Открытие условий доставки в коризне ресторана
-searchdemo.spec.js - Поиск товара на каталоге
-timepeakerCatalog.spec.js - Изменение времени доставки на каталоге
-toCatalog.spec.js - Переход на каталог по нажатию на лого
-toShopList.spec.js - Переход в магазин лист с каталога
+- addCleanCartRest.spec.js - Добавление и удаление товара из корзины ресторана
+- addCleanCartShop.spec.js - Добавление и удаление товара из корзины магазина
+- changeAddress.spec.js - Изменение адреса на каталоге
+- openDeliveryConditions.spec.js - Открытие условий доставки в коризне ресторана
+- searchdemo.spec.js - Поиск товара на каталоге
+- timepeakerCatalog.spec.js - Изменение времени доставки на каталоге
+- toCatalog.spec.js - Переход на каталог по нажатию на лого
+- toShopList.spec.js - Переход в магазин лист с каталога
 
 <!--
 **below3495/below3495** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
