@@ -1,24 +1,16 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-const TEXT = {
-  logoName: {
-    ru: 'Логотип Яндекс Еды',
-    en: 'Yandex Eats logo'
-  },
-  shops: {
-    ru: 'Магазины',
-    en: 'Shops'
-  },
-  searchPlaceholder: {
-    ru: 'Найти ресторан, блюдо или товар',
-    en: 'Search for restaurants, food'
-  }
-};
+test("Переход на каталог по тапу на лого", async ({ page }) => {
+  const logo = page.getByRole("link", { name: "Логотип" });
+  const shopsHeader = page.getByRole("heading", { name: "Магазины" });
+  const combobox = page.getByRole("combobox", {
+    name: "Найти ресторан",
+  });
 
-test('test', async ({ page }) => {
-  await page.goto('https://eda.yandex.ru/moscow?shippingType=delivery');
-  await page.getByRole('link', { name: 'Магнит Доставка 35 – 45' });
-  await page.getByRole('link', { name: new RegExp ('Логотип|logo', 'i') }).click();
-  await expect(page.getByRole('heading', { name: new RegExp ('Магазины|Shops', 'i') })).toBeVisible();
-  await expect(page.getByRole('combobox', { name: new RegExp ('Найти|Search', 'i') })).toBeVisible();
+  await page.goto("https://eda.yandex.ru/moscow?lang=ru&shippingType=delivery");
+  await page.getByRole("link", { name: "Магнит" });
+  await expect(logo).toBeVisible();
+  await logo.click();
+  await expect(shopsHeader).toBeVisible();
+  await expect(combobox).toBeVisible();
 });
