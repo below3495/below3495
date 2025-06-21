@@ -1,36 +1,24 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-const TEXT = {
-  searchPlaceholder: {
-    ru: 'Найти ресторан, блюдо или товар',
-    en: 'Search for restaurants, food'
-  },
-  searchButton: {
-    ru: 'Найти',
-    en: 'Search'
-  },
-  resultsHeader: {
-    ru: 'Найдено',
-    en: 'Found'
-  }
-};
+test("Поиск товара на каталоге", async ({ page }) => {
+  const combobox = page.getByRole("combobox", {
+    name: "Найти ресторан, блюдо или товар",
+  });
+  const search = page.getByRole("button", { name: "Найти" });
+  const searchResult = page.getByRole("heading", {
+    name: "Найдено",
+  });
+  const firstResult = page
+    .getByRole("listitem")
+    .filter({ hasText: "Сыр" })
+    .first();
 
-test('Поиск товара на каталоге', async ({ page }) => {
-  
-const searchInput = page.getByRole('combobox', { name: new RegExp('ресторан|restaurant', 'i') });
-const searchButton = page.getByRole('button', { name: new RegExp('найти|search', 'i') }).last();
-const resultsHeader = page.getByRole('heading').filter({ hasText: new RegExp('найдено|found', 'i') });
-const resultsDiv = page.locator('#main div').filter({ hasText: new RegExp('найдено|found', 'i') }).first();
-  
-  await page.goto('https://eda.yandex.ru/moscow?shippingType=delivery');
+  await page.goto("https://eda.yandex.ru/moscow?lang=ru&shippingType=delivery");
+  await expect(combobox).toBeVisible();
+  await combobox.click();
+  await combobox.fill("сыр");
+  await search.click();
 
-  await searchInput.waitFor();
-  await searchInput.click();
-  
-  await searchInput.fill('сыр');
-  
-  await searchButton.click();
-  
-  await expect(resultsHeader).toBeVisible();
-  await expect(resultsDiv).toBeVisible();
+  await expect(searchResult).toBeVisible();
+  await expect(firstResult).toBeVisible();
 });

@@ -1,46 +1,46 @@
-import { test, expect } from '@playwright/test';
-import { defineConfig, devices } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-export default defineConfig({ 
-  use: {
-    // Эмулирует локаль пользователя. По дефолту тестовая Еда открывается на английской локали
-    locale: 'ru-RU',
-    permissions: [],
-  }});
+test.beforeEach(async ({ page }) => {
+  await page.goto("https://eda.yandex.ru/moscow?lang=ru&shippingType=delivery");
+  await page.getByRole("button", { name: "Укажите адрес доставки" }).click();
+  await page.getByTestId("address-input").click();
+  await page.getByTestId("address-input").fill("тверская 7");
+  await page.getByLabel("Тверская улица, 7Москва").click();
+  await page.getByRole("button", { name: "ОК" }).click();
+  await page.getByRole("link").filter({ hasText: "Zotman Pizza" }).click();
+});
 
-  test.use({
-    locale: 'ru-RU',
-  });
-  test.use({permissions: []})
+test("Добавление товара в корзину ресторана", async ({ page }) => {
+  const searchItem = page
+    .getByRole("textbox", { name: "Найти в ресторане" })
+    .fill("Волковский лимонад Волчок Манго-Кокос");
+  const addToCartButton = page.getByRole("button", { name: "В корзину" });
+  const cart = page.getByRole("button", { name: "Корзина" });
 
-  test.beforeEach(async ({ page }) => {
-    await page.goto('https://eda.yandex.ru/moscow?shippingType=delivery');
-    await page.getByRole('button', { name: 'Укажите адрес доставки' }).click();
-    await page.getByTestId('address-input').click();
-    await page.getByTestId('address-input').fill('тверская 7');
-    await page.getByLabel('Тверская улица, 7Москва').click();
-    await page.getByRole('button', { name: 'ОК' }).click();
-    await page.getByRole('link').filter({ hasText: 'Zotman Pizza' }).click();
-  });
+  await page.getByRole("textbox", { name: "Найти в ресторане" }).click();
+  await searchItem;
+  await addToCartButton.click();
 
-    test('Добавление товара в корзину ресторана', async ({ page }) => {
+  await expect(cart).toBeVisible();
+});
 
-        await page.getByRole('textbox', { name: 'Найти в ресторане' }).click();
-        await page.getByRole('textbox', { name: 'Найти в ресторане' }).fill('Волковский лимонад Волчок Манго-Кокос');
-        await page.getByRole('button', { name: 'В корзину' }).click();
-    
-        await expect(page.getByRole('button', { name: 'Корзина' })).toBeVisible();
-    })
+test("Удаление товара из корзины ресторана", async ({ page }) => {
+  const searchItem = page
+    .getByRole("textbox", { name: "Найти в ресторане" })
+    .fill("Волковский лимонад Волчок Манго-Кокос");
+  const addToCartButton = page.getByRole("button", { name: "В корзину" });
+  const cart = page.getByRole("button", { name: "Корзина" });
 
-    test('Удаление товара из корзины ресторана', async ({ page }) => {
+  await page.getByRole("textbox", { name: "Найти в ресторане" }).click();
+  await searchItem;
+  await addToCartButton.click();
 
-        await page.getByRole('textbox', { name: 'Найти в ресторане' }).click();
-        await page.getByRole('textbox', { name: 'Найти в ресторане' }).fill('Волковский лимонад Волчок Манго-Кокос');
-        await page.getByRole('button', { name: 'В корзину' }).click();
-    
-        await expect(page.getByRole('button', { name: 'Корзина' })).toBeVisible();
-        await page.getByRole('button', { name: 'Корзина' }).click();
-        await page.locator('.AppPopup_wrapper').getByRole('button', { name: 'Очистить' }).click();
-        await page.getByRole('button', { name: 'Да, очистить' }).click();
-        await expect(page.getByRole('button', { name: 'Корзина' })).toBeHidden();
-    });
+  await expect(cart).toBeVisible();
+  await cart.click();
+  await page
+    .locator(".AppPopup_wrapper")
+    .getByRole("button", { name: "Очистить" })
+    .click();
+  await page.getByRole("button", { name: "Да, очистить" }).click();
+  await expect(cart).toBeHidden();
+});
